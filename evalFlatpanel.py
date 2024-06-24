@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Description -
+# Description - aaa
 # Last change -     29.05.2023     
 # Author -          J. Horn
 
