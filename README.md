@@ -1,4 +1,4 @@
-# Data Processing and Analysis
+# Data Processing & Analysis
 	### Test
 ## Acquisition: XISL to controll XRD 0822
 	### Set gain and integration time
