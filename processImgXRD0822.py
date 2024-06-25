@@ -32,8 +32,8 @@ def processRawFrames(file, medFiltKernelSize):
     bg = 0
     
     # Load correction matrices
-    # Bad pixel matrix will calculated based on background frames pre exposure
-    pxlGainMatrix = np.load("pxlSensitivityMatrix.npy")
+    # Bad pixel matrix will be calculated based on background frames pre exposure
+    pxlGainMatrix = np.load("uniformity_matrix_0822.npy")
     
     ## Read raw frames
     # Open file, read header information
