@@ -18,7 +18,7 @@ def readRawDoseData(file):
     chamberNb = []
   
     # Load chamber layout OD1600XDR 
-    layout = np.load('LayoutOD1600XDR.npy')
+    layout = np.load('layout_OD1600XDR.npy')
     
     # Extract only dose values and chamber indices
     strPattern = re.compile('#') 

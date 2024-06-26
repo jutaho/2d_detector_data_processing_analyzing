@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Description - Field flatness analysis according to TG224
-# Last change - 20.06.2024
-# Author - J. Horn
+"""
+Evaluate field flatness .
+Create an interpolated tiff-file. 
+
+juh
+"""
 
 # Import modules
 import datetime
@@ -12,7 +15,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from scipy.signal import savgol_filter
 
 
-class ImageAnalyzer:
+class FlatnessAnalyzer:
     def __init__(self, img, pxl_shift_in_mm, file_name, detector):
         self.img = img
         self.pxl_shift_in_mm = pxl_shift_in_mm
@@ -168,10 +171,10 @@ class ImageAnalyzer:
 
         q1 = 0.001
         q2 = 1 - q1
-        sorted_array = np.sort(img_rel_roi.flatten())
+        self.sorted_array = np.sort(img_rel_roi.flatten())
 
-        self.qa = sorted_array[int(np.round(q1 * len(sorted_array)))]
-        self.qb = sorted_array[int(np.round(q2 * len(sorted_array)))]
+        self.qa = self.sorted_array[int(np.round(q1 * len(self.sorted_array)))]
+        self.qb = self.sorted_array[int(np.round(q2 * len(self.sorted_array)))]
         self.d_qb_minus_qa = self.qb - self.qa
         self.d_iqr_percent = (self.d_qb_minus_qa / 2) * 100
 
@@ -213,9 +216,9 @@ class ImageAnalyzer:
         fig1, axes1 = plt.subplots(2, 1, figsize=(10, 10), dpi=150)
         plt.rcParams['axes.titlesize'] = 12
 
-        n_bins = int((max(sorted_array) - min(sorted_array)) / 0.001)
-        counts, bins = np.histogram(sorted_array, bins=n_bins)
-        axes1[0].hist(sorted_array, bins, weights=np.ones_like(sorted_array) / len(sorted_array) * 100,
+        n_bins = int((max(self.sorted_array) - min(self.sorted_array)) / 0.001)
+        counts, bins = np.histogram(self.sorted_array, bins=n_bins)
+        axes1[0].hist(self.sorted_array, bins, weights=np.ones_like(self.sorted_array) / len(self.sorted_array) * 100,
                       color="white", ec="black")
         axes1[0].vlines(x=self.d_mean, ymin=0, ymax=20, color="black", linestyle="-")
         axes1[0].vlines(x=[self.d_mean + self.d_sd, self.d_mean - self.d_sd], ymin=0, ymax=20,
@@ -232,7 +235,7 @@ class ImageAnalyzer:
             [f"μ = {self.d_mean:.2f}", f"σ = ± {self.d_sd:.2f}", f"Dmax - Dmin = {self.d_range:.2f}",
              "Tolerance-Levels"], loc="upper right", framealpha=1)
 
-        axes1[1].plot(self.pos_vector_vert_in_mm, profile_vert, "g.", self.pos_vector_horiz_in_mm, profile_horiz, "b.")
+        axes1[1].plot(self.pos_vector_vert_in_mm, self.profile_vert, "g.", self.pos_vector_horiz_in_mm, self.profile_horiz, "b.")
         axes1[1].set(title="Central Line Profile")
         axes1[1].set_xlabel("Position [mm]", fontsize=12)
         axes1[1].set_ylabel("normalized Signal", fontsize=12)
@@ -294,16 +297,12 @@ class ImageAnalyzer:
         p.close()
 
 
-def main():
+if __name__ == "__main__":
     # Example usage
     img = np.random.rand(2048, 2048)  # Replace with your actual image
     pxl_shift_in_mm = 0.1
     file_name = "output.pdf"
     detector = "flatpanel"
 
-    analyzer = ImageAnalyzer(img, pxl_shift_in_mm, file_name, detector)
+    analyzer = FlatnessAnalyzer(img, pxl_shift_in_mm, file_name, detector)
     analyzer.analyze()
-
-
-if __name__ == "__main__":
-    main()
