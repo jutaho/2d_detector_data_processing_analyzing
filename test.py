@@ -7,10 +7,10 @@ juh
 """
 
 from analyze_field_flatness import FlatnessAnalyzer
-from conv_mcc_2_tiff import MCCProcessor
+from read_octavius1600xrd_mcc import MCCProcessor
 
-layout_file = 'layout_OD1600XDR.npy'
-default_folder = "//test_data//"
+layout_file = 'layout_octavius1600xdr.npy'
+default_folder = ".//test_data//"
 
 processor = MCCProcessor(layout_file)
-dose_image = processor.select_folder_and_process(default_folder)
+dose_image = processor.process_folder(default_folder)

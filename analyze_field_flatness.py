@@ -300,7 +300,7 @@ class FlatnessAnalyzer:
 if __name__ == "__main__":
     # Example usage
     img = np.random.rand(2048, 2048)  # Replace with your actual image
-    pxl_shift_in_mm = 0.1
+    pxl_shift_in_mm = 0.2
     file_name = "output.pdf"
     detector = "flatpanel"
 

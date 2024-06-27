@@ -29,19 +29,19 @@ class XRDProcessor:
         self.bad_pxl_factor = 3
         self.bg = 0
 
-     def process_frames(self):
-         self.load_correction_matrices()
-         self.read_raw_frames()
-         self._define_exceeding_pixels()
-         self._classify_frames()
-         self._background_correction()
-         self._bad_pixel_correction()
-         self._sensitivity_correction()
-         self._calculate_noise_and_signal()
-         self._write_log()    
+    def process_frames(self):
+        self.load_correction_matrices()
+        self.read_raw_frames()
+        self._define_exceeding_pixels()
+        self._classify_frames()
+        self._background_correction()
+        self._bad_pixel_correction()
+        self._sensitivity_correction()
+        self._calculate_noise_and_signal()
+        self._write_log()    
 
     def load_correction_matrices(self):
-        self.pxl_gain_matrix = np.load("pxlSensitivityMatrix.npy")
+        self.pxl_gain_matrix = np.load("uniformity_matrix_xrd0822.npy")
 
     def read_raw_frames(self):
         with open(self.file, mode="rb") as header:
@@ -266,7 +266,7 @@ class XRDProcessor:
 
 
 def main():
-    file = "2004.his"  # Replace with your actual file path
+    file = ".//test_data//2001.his"  # Replace with your actual file path
     med_filt_kernel_size = 5
     processor = XRDProcessor(file, med_filt_kernel_size)
     processor.process_frames()
