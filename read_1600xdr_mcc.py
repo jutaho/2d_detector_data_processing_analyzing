@@ -10,8 +10,7 @@ juh
 import os
 import glob
 import re
-import tkinter as tk
-from tkinter import filedialog
+
 import numpy as np
 from tifffile import TiffWriter
 from PIL import Image
@@ -130,7 +129,6 @@ def interpolate_nan(dose_container):
                 # Check the right neighbor    
                 if j < dose_container.shape[1] - 1 and valid_mask[i, j + 1]:
                     neighbors.append(dose_container[i, j + 1])
-                    
                         
                 if neighbors:
                     # Use median to avoid ripples in high gradient areas 
@@ -233,7 +231,8 @@ def write_tiff_file(dose_array, output_path):
     with TiffWriter(output_path) as tif:
         tif.write(
             dose_array_inv_shift_16bit, 
-            resolution=(resolution_ppi, resolution_ppi)
+            resolution=(resolution_ppi, resolution_ppi),
+            metadata=None
         )
         
     # Open the TIFF file and add the "Software" tag
@@ -274,23 +273,9 @@ def process_folder(folder_path):
             
     return doses, dose_array, dose_image
 
-def select_folder_and_process(default_folder):
-    """
-    Open a dialog for the user to select a folder, then process all .mcc files in that folder.
-
-    """
-    root = tk.Tk()
-    root.withdraw()  # Hide the root window
-    folder_path = filedialog.askdirectory(initialdir=default_folder)  # Ask the user to select a directory
-    if not folder_path:
-        folder_path = default_folder
-    doses, dose_array, dose_image = process_folder(folder_path)
-    
-    return doses, dose_array, dose_image
-
 # Usage when directly called
 if __name__ == "__main__":
-    default_folder = "r://Therapie_QA//2024//H1//E-2-2-1-Homogenität//06.Juni//TEST//"
-    doses, dose_array, dose_image = select_folder_and_process(default_folder)
+    default_folder = ".//test//"
+    doses, dose_array, dose_image = process_folder(default_folder)
     
 
